@@ -99,7 +99,8 @@ const App = () => {
   let [output, setoutput] = useState("");
   let [totallength, settotallength] = useState("");
   let [encode, setencode] = useState("");
-
+  let [inputencoder,setencoder]= useState('')
+  let [outputen,setoutputen] = useState('')
   useEffect(() => {
     if (!input) {
       setoutput("");
@@ -115,7 +116,7 @@ const App = () => {
       for (let j = 0; j < arr.length; j++) {
         if (arr[j] === word[i]) {
           tempOutput.push(`${word[i]} = ${j}`);
-          encodenum.push(j); // note: use j for index in input
+          encodenum.push(j)
         }
       }
     }
@@ -123,6 +124,7 @@ const App = () => {
     setoutput(tempOutput.join(", "));
     setencode(encodenum); // set all at once
   }, [input]);
+
 
   let copytext = () => {
     navigator.clipboard
@@ -134,20 +136,36 @@ const App = () => {
         console.error("Failed to copy: ", err);
       });
   };
+
+  let encoder=()=>{
+      let output=[]
+     let value = inputencoder.split(",")
+     for(let i= 0; i<value.length ; i++){
+      value[i]
+      for(let j= 0; j<arr.length ; j++){
+         if(value[i]==j){
+          output.push(arr[j])
+         }
+      }
+     }
+     let out = output.join("")
+     setoutputen(out)
+    //  console.log(out)
+  }
   return (
     <div>
       {/* heading? */}
-      <div className="border m-auto w-[80%] mt-10 text-center">
+      <div className=" m-auto w-[80%] mt-10 text-center">
         <h1 className="text-3xl font-bold">
-          Tokenizer Project How LLM work and they store data in vector database
+          Tokenizer Project: How LLMs work and how they store data in a vector database
         </h1>
       </div>
 
       {/* input output screen box */}
 
-      <div className="border mt-10 w-[80%] m-auto flex gap-7">
+      <div className=" mt-10 w-[80%] m-auto flex gap-7">
         {/* box1 */}
-        <div className="border w-[50%] rounded-2xl h-[450px]">
+        <div className="border w-[50%] rounded-2xl h-[450px] ">
           <div className="border flex justify-around  text-2xl font-semibold p-5">
             <h1>Text Input</h1>
             <button
@@ -162,19 +180,20 @@ const App = () => {
           <div className="p-6 border">
             <textarea
               value={input}
+              placeholder="paste here"
               onChange={(e) => setinput(e.target.value)}
-              className="w-full h-48 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="text-3xl w-full h-48 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
               placeholder="Start typing from the top..."
             />
           </div>
           {/* total character? */}
-          <div className="p-6">
+          <div className="p-6 text-2xl">
             <h1>Total character :{totallength}</h1>
           </div>
         </div>
 
         {/* box 2 */}
-        <div className="w-[50%] border border-red-600 rounded-2xl">
+        <div className="w-[50%] border border-white rounded-2xl">
           <div className="border flex justify-around  text-2xl font-semibold p-5">
             <h1>Token Encoding</h1>
             <button onClick={copytext} className="border w-[80px] rounded-xl">
@@ -182,12 +201,9 @@ const App = () => {
             </button>
           </div>
 
-          <div className="w-full h-48 p-3 border">{output}</div>
-
-          <div className="border p-6 ">
-            <p>Encoded Sequence</p>
-            <h1>{encode}</h1>
-          </div>
+          <div className="w-full  p-3">
+            {output}
+            </div>
         </div>
       </div>
 
@@ -195,9 +211,12 @@ const App = () => {
       <div className="border w-[80%] m-auto mt-5 ">
          <h1 className="text-center text-4xl">Encoder</h1>
         <div className="p-4 border flex justify-around">
-          <input type="text"  className="border w-[40%] p-4"/>
-          <button className="border p-3 rounded-2xl ">convert</button>
+          <input type="text" value={inputencoder} onChange={(e)=>setencoder(e.target.value)} className="border w-[40%] p-4"/>
+          <button onClick={encoder} className="border p-3 rounded-2xl ">convert</button>
         </div>
+      </div>
+      <div className="border w-[80%] m-auto mt-5 h-[100px] p-5 text-3xl">
+            {outputen}
       </div>
     </div>
   );
